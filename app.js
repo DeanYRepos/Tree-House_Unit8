@@ -6,13 +6,13 @@ const logger = require('morgan');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const db = require('./models').sequelize; 
+const {sequelize, Book} = require('./models'); 
 
 const app = express();
 //const sequelize = require('sequelize');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -28,7 +28,7 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 (async ()=> {
-  await db.sequelize.sync({force: true});
+  await sequelize.sync({force: true});
   try {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
