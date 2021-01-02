@@ -14,8 +14,8 @@ const asyncHandler = (cb)=> { //async handler
 }
 router.get('/', asyncHandler(async(req, res, next) => {
   const books = await Book.findAll();
-   res.render('index',  books );
-  // res.render(books);
+   res.render('index', { books });
+   res.render(books);
    //res.render(json(books));
    //console.log(res.json(book));
  }));
