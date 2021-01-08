@@ -6,7 +6,7 @@ const logger = require('morgan');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const {sequelize, Book} = require('./models'); 
+const {sequelize, Book} = require('./models'); // imported db    
 
 const app = express();
 //const sequelize = require('sequelize');
@@ -25,10 +25,14 @@ app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  const err = new Error();
+  err.status = 404;
+  err.message = 'Oh no! Something went wrong, please try again.'
+  res.status(404).render('page_not_found', err);
+ // next(createError(404));
 });
 (async ()=> {
-  await sequelize.sync({force: true});
+  await sequelize.sync();
   try {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
@@ -36,24 +40,17 @@ app.use(function(req, res, next) {
     console.error('Unable to connect to the database:', error);
   }
 
-})
-// sequelize.sync();{
-// try {
-//   await sequelize.authenticate();
-//   console.log('Connection has been established successfully.');
-// } catch (error) {
-//   console.error('Unable to connect to the database:', error);
-// }
-// }
-// error handler
+})();
+
+// Global error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+  err.status = 500
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error',err);
 });
 
 module.exports = app;
