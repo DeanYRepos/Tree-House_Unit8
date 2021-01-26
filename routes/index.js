@@ -23,8 +23,8 @@ const asyncHandler = (cb)=> { //async handler
  }));
  // List of Books route
  router.get("/books", asyncHandler(async(req, res) => {
-  const book = await Book.findByPk(req.params.id);
-  res.render("index", { book, title: 'Library Books' });
+  const books = await Book.findAll();
+  res.render("index", { books, title: 'Library Books' });
 }));
 // New Book form route
 router.get("/books/new", (req, res) => {
