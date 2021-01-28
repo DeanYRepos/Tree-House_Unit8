@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Book } = require('../models');
-
+const Book = require('../models').Book;
 
 /*Handles asynchronous functions */
 const asyncHandler = (cb)=> { //async handler
@@ -19,7 +18,7 @@ const asyncHandler = (cb)=> { //async handler
  // Home route
  router.get('/', asyncHandler(async(req, res, next) => {
   const books = await Book.findAll();
-   res.redirect('/books', {books});
+   res.redirect('/books');
 
  }));
  // List of Books route
