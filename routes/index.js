@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Book = require('../models').Book;
+const { Book } = require('../models');
+
 
 /*Handles asynchronous functions */
 const asyncHandler = (cb)=> { //async handler
@@ -18,7 +19,7 @@ const asyncHandler = (cb)=> { //async handler
  // Home route
  router.get('/', asyncHandler(async(req, res, next) => {
   const books = await Book.findAll();
-   res.redirect('/books');
+   res.redirect('/books', {books});
 
  }));
  // List of Books route
@@ -33,7 +34,7 @@ router.get("/books/new", (req, res) => {
 // Post new Book route  
 router.post("/books/new", asyncHandler(async(req, res) => {
   const book = await Book.create(req.body);
-  res.redirect("/books/" + book.id, { book, title: 'Library Books' });
+  res.redirect('/books', { book, title: 'Library Books' });
 }));
 // Book detail form route
 router.get("/books/:id", asyncHandler(async(req, res) => {
@@ -44,7 +45,7 @@ router.get("/books/:id", asyncHandler(async(req, res) => {
 router.post("/books/:id", asyncHandler(async(req, res) => {
   const book = await Book.findByPk(req.params.id);
   await book.update(req.body);
-  res.redirect("/books/" + book.id);
+  res.redirect("/books");
 }));
 
 /* Delete book form. */
