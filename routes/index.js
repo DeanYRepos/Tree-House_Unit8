@@ -18,7 +18,7 @@ const asyncHandler = (cb)=> { //async handler
  // Home route
  router.get('/', asyncHandler(async(req, res, next) => {
   const books = await Book.findAll();
-   res.redirect('/books');
+   res.redirect(301, '/books');
 
  }));
  // List of Books route
@@ -33,7 +33,7 @@ router.get("/books/new", (req, res) => {
 // Post new Book route  
 router.post("/books/new", asyncHandler(async(req, res) => {
   const book = await Book.create(req.body);
-  res.redirect('/books', { book, title: 'Library Books' });
+  res.redirect(301,'/books');
 }));
 // Book detail form route
 router.get("/books/:id", asyncHandler(async(req, res) => {
@@ -44,20 +44,16 @@ router.get("/books/:id", asyncHandler(async(req, res) => {
 router.post("/books/:id", asyncHandler(async(req, res) => {
   const book = await Book.findByPk(req.params.id);
   await book.update(req.body);
-  res.redirect("/books");
+  res.redirect(301,"/books");
 }));
 
-/* Delete book form. */
-router.get("/books/:id/delete", asyncHandler(async (req, res) => {
-  const book = await Book.findByPk(req.param.id);
-  res.render("/books/delete", { book, title: "Delete Book" });
-}));
+
 
 /* Delete individual book. */
 router.post('/books/:id/delete', asyncHandler(async (req ,res) => {
   const book = await Book.findByPk(req.param.id);
   await book.destroy();
-  res.redirect("/books");
+  res.redirect(301,"/books");
 }));
 
 
