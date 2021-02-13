@@ -5,6 +5,11 @@ block content
   title Books
   
   h1 Books
+  p 
+  form(method= 'get', action= '/books' )
+    label(for='search') Search
+    input#search(name='search', type= 'text')
+    button Search
   p
       
     a.button(href='/books/new') Create New Book

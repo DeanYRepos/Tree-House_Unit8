@@ -6,7 +6,7 @@ const logger = require('morgan');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const {sequelize, Book} = require('./models'); // imported db    
+const {sequelize, Books} = require('./models'); // imported db    
 
 const app = express();
 //const sequelize = require('sequelize');
@@ -28,7 +28,7 @@ app.use(function(req, res, next) {
   const err = new Error();
   err.status = 404;
   err.message = 'Oh no! Something went wrong, please try again.'
-  res.status(404).render('page_not_found', err);
+  res.status(404).render('page-not-found', err);
  // next(createError(404));
 });
 (async ()=> {
@@ -42,6 +42,8 @@ app.use(function(req, res, next) {
 
 })();
 
+
+
 // Global error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
@@ -49,6 +51,7 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   err.status = 500
   // render the error page
+  
   res.status(err.status || 500);
   res.render('error',err);
 });
