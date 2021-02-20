@@ -24,32 +24,41 @@ const errHandler = (errStatus, msg) =>{
 };
  // Home route
  router.get('/', asyncHandler(async(req, res, next) => {
-   const search = req.query.search;
    
-   if(search){
-   const books = await Book.findAll({
-    attributes: ['title', 'author', 'genre', 'year'],
+   const books = await Book.findAll()
+   res.redirect(301, "/books");
+}));
+
+router.get('/search', asyncHandler(async(req, res, next) => {
+  const search = req.query.search
+ // const allBooks = await Book.findAll();
+  const books = await Book.findAndCountAll({
+    //attributes: ['title', 'author', 'genre', 'year'],
     where:{
       title: {
-        [Op.iLike]: `%${search}%`
+        [Op.like]: `${search}%`
       },
       author: {
-        [Op.iLike]: `%${search}%`
+        [Op.like]: `${search}%`
       },
       genre: {
-        [Op.iLike]: `%${search}%`
+        [Op.like]: `${search}%`
       },
       year: {
-        [Op.iLike]: `%${search}%`
+        [Op.like]: `${search}%`
       },
 
-    } 
-  })
+    } ,
+    offset:0,
+    limit: 10
+  });
+ 
+  console.log(books);
+  console.log(search);
    
-  } else {
 
-   res.redirect(301, "/books");
-    }  
+    res.render("index", { books });
+
 }));
  // List of Books route
  router.get("/books", asyncHandler(async(req, res) => {
