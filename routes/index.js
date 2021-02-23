@@ -32,24 +32,34 @@ const errHandler = (errStatus, msg) =>{
 router.get('/search', asyncHandler(async(req, res, next) => {
   const search = req.query.search
  // const allBooks = await Book.findAll();
-  const books = await Book.findAndCountAll({
-    //attributes: ['title', 'author', 'genre', 'year'],
+  let {count ,rows, books} = await Book.findAndCountAll({
+    attributes: ['title', 'author', 'genre', 'year'],
     where:{
-      title: {
-        [Op.like]: `${search}%`
-      },
-      author: {
-        [Op.like]: `${search}%`
-      },
-      genre: {
-        [Op.like]: `${search}%`
-      },
-      year: {
-        [Op.like]: `${search}%`
-      },
+       [Op.or]:  [
+         {
+           title: {
+             [Op.like]: `%${search}%`
+           }
+         },
+         {
+           author: {
+             [Op.like]: `%${search}%`
+           }
+         },
+         {
+           genre:   {
+            [Op.like]: `%${search}%`
+          }
+         },
+         {
+           year:   {
+            [Op.like]: `%${search}%`
+          }
+         }
+
+       ]
 
     } ,
-    offset:0,
     limit: 10
   });
  
@@ -57,7 +67,7 @@ router.get('/search', asyncHandler(async(req, res, next) => {
   console.log(search);
    
 
-    res.render("index", { books });
+    res.render("index", {books: rows});
 
 }));
  // List of Books route
