@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Book = require('../models').Book;
 const { Op } = require ("sequelize");
+
+
 /*Handles asynchronous functions */
 const asyncHandler = (cb)=> { //async handler
   return async(req, res, next) => {
@@ -22,6 +24,7 @@ const errHandler = (errStatus, msg) =>{
   throw err;
 
 };
+
  // Home route
  router.get('/', asyncHandler(async(req, res, next) => {
    
@@ -30,10 +33,19 @@ const errHandler = (errStatus, msg) =>{
 }));
 
 router.get('/search', asyncHandler(async(req, res, next) => {
-  const search = req.query.search
- // const allBooks = await Book.findAll();
-  let {count ,rows, books} = await Book.findAndCountAll({
+  const search = req.query.search;
+  let page = req.query.page || 1;
+  let totalPages;
+  let bookCount;
+  let books;
+  
+  if(search){
+  books = await Book.findAndCountAll({
+    
     attributes: ['title', 'author', 'genre', 'year'],
+    limit: 5,
+    offset: page * 5 - 5,
+    page,
     where:{
        [Op.or]:  [
          {
@@ -60,14 +72,27 @@ router.get('/search', asyncHandler(async(req, res, next) => {
        ]
 
     } ,
-    limit: 10
-  });
- 
-  console.log(books);
-  console.log(search);
-   
 
-    res.render("index", {books: rows});
+   
+ })
+  bookCount = books.count;
+  totalPages = Math.ceil(bookCount / 5)
+} else{
+
+    books = await Book.findAndCountAll({
+
+      limit: 5,
+      offset: page * 5 - 5,
+    })
+
+  }
+  
+
+  console.log(books);
+  console.log(bookCount);
+  console.log(search);
+  console.log(totalPages);
+    res.render("index", {books: books.rows, bookCount, totalPages, page, search});
 
 }));
  // List of Books route
