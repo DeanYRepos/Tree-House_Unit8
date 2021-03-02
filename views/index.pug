@@ -29,4 +29,11 @@ block content
               td= book.genre
               td= book.year
             tr
+           
+  -var pageNum = totalPages
+    while pageNum > 0
+      each link in pageNum
+        li 
+          a(href=`/books?search=${search}page=${page}`)= link++
+
         

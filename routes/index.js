@@ -92,12 +92,14 @@ router.get('/search', asyncHandler(async(req, res, next) => {
   console.log(bookCount);
   console.log(search);
   console.log(totalPages);
-    res.render("index", {books: books.rows, bookCount, totalPages, page, search});
+  console.log(page);
+    
+  res.render("index", { books: books.rows, bookCount, totalPages, page, search });
 
 }));
  // List of Books route
  router.get("/books", asyncHandler(async(req, res) => {
-  const books = await Book.findAll();
+  const books = await Book.findAll({limit: 5});
   res.render("index", { books, title: 'Library Books' });
 }));
 // New Book form route
