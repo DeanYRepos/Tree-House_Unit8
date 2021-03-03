@@ -106,8 +106,10 @@ router.get('/search', asyncHandler(async(req, res, next) => {
    
   });
   console.log(books);
-  bookCount = books.count;
+  bookCount = await Book.count();
   totalPages = Math.ceil(bookCount / 5)
+  console.log(totalPages);
+  console.log(bookCount);
   res.render("index", { books, title: 'Library Books', page: page, totalPages, bookCount });
 }));
 
