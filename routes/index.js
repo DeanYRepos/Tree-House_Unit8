@@ -34,18 +34,13 @@ const errHandler = (errStatus, msg) =>{
 
 router.get('/search', asyncHandler(async(req, res, next) => {
   const search = req.query.search;
-  let page = req.query.page || 1;
-  let totalPages;
-  let bookCount;
-  let books;
+ 
   
   if(search){
   books = await Book.findAndCountAll({
     
     attributes: ['title', 'author', 'genre', 'year'],
-    limit: 5,
-    offset: page * 5 - 5,
-    page,
+ 
     where:{
        [Op.or]:  [
          {
@@ -88,20 +83,34 @@ router.get('/search', asyncHandler(async(req, res, next) => {
   }
   
 
-  console.log(books);
-  console.log(bookCount);
-  console.log(search);
-  console.log(totalPages);
-  console.log(page);
+  // console.log(books);
+  // console.log(bookCount);
+  // console.log(search);
+  // console.log(totalPages);
+  // console.log(page);
     
   res.render("index", { books: books.rows, bookCount, totalPages, page, search });
 
 }));
  // List of Books route
- router.get("/books", asyncHandler(async(req, res) => {
-  const books = await Book.findAll({limit: 5});
-  res.render("index", { books, title: 'Library Books' });
+ router.get("/books/:page", asyncHandler(async(req, res) => {
+  const page = req.params.page || 1;
+  let totalPages;
+  let bookCount;
+  console.log(page);
+  const books = await Book.findAll({
+    
+    limit: 5, 
+    offset:( page * 5 )- 5,
+    page: page
+   
+  });
+  console.log(books);
+  bookCount = books.count;
+  totalPages = Math.ceil(bookCount / 5)
+  res.render("index", { books, title: 'Library Books', page: page, totalPages, bookCount });
 }));
+
 // New Book form route
 router.get("/books/new", (req, res) => {
   res.render('new-book', {book: {}, title: "New Book"} )
