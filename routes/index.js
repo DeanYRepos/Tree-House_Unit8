@@ -93,8 +93,8 @@ router.get('/search', asyncHandler(async(req, res, next) => {
 
 }));
  // List of Books route
- router.get("/books/:page", asyncHandler(async(req, res) => {
-  const page = req.params.page || 1;
+ router.get("/books/:page?", asyncHandler(async(req, res) => {
+  const page = req.query.page || 1;
   let totalPages;
   let bookCount;
   console.log(page);
