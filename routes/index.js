@@ -32,8 +32,8 @@ const errHandler = (errStatus, msg) =>{
    res.redirect(301, "/books");
 }));
 
-router.get('books/search', asyncHandler(async(req, res, next) => {
-  const search = req.query.search;
+router.get('/books/search', asyncHandler(async(req, res, next) => {
+  const search = req.query.search || 1;
   if(search){
   books = await Book.findAndCountAll({
     
