@@ -32,7 +32,7 @@ const errHandler = (errStatus, msg) =>{
    res.redirect(301, "/books");
 }));
 
-router.get('/books/search', asyncHandler(async(req, res, next) => {
+router.get('/books/:search', asyncHandler(async(req, res, next) => {
   const search = req.query.search || 1;
   if(search){
   books = await Book.findAndCountAll({
@@ -117,7 +117,7 @@ router.post("/books/new", asyncHandler(async(req, res) => {
   }
 }));
 // Book detail form route
-router.get("/books/:id", asyncHandler(async(req, res) => {
+router.get("/books/update/:id", asyncHandler(async(req, res) => {
   const book = await Book.findByPk(req.params.id);
 
   if(book){

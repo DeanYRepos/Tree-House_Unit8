@@ -6,7 +6,7 @@ block content
   
   h1 Books
   p 
-  form(method= 'get', action= "/books/search" )
+  form(method= 'get', action= `/books/${search}` )
     label(for='search') Search
     input#search(name='search', type= 'text')
     button Search
@@ -24,7 +24,7 @@ block content
           each book in books
             tr
               td
-               a(href=`/books/${book.id}`)= book.title
+               a(href=`/books/update/${book.id}`)= book.title
               td= book.author
               td= book.genre
               td= book.year
