@@ -32,10 +32,8 @@ const errHandler = (errStatus, msg) =>{
    res.redirect(301, "/books");
 }));
 
-router.get('/search', asyncHandler(async(req, res, next) => {
+router.get('books/search', asyncHandler(async(req, res, next) => {
   const search = req.query.search;
- 
-  
   if(search){
   books = await Book.findAndCountAll({
     
@@ -70,31 +68,17 @@ router.get('/search', asyncHandler(async(req, res, next) => {
 
    
  })
-  bookCount = books.count;
-  totalPages = Math.ceil(bookCount / 5)
-} else{
+} else {
 
-    books = await Book.findAndCountAll({
-
-      limit: 5,
-      offset: page * 5 - 5,
-    })
-
-  }
-  
-
-  // console.log(books);
-  // console.log(bookCount);
-  // console.log(search);
-  // console.log(totalPages);
-  // console.log(page);
-    
-  res.render("index", { books: books.rows, bookCount, totalPages, page, search });
+  res.redirect(301, "/books")
+}
+    console.log(search)
+  res.render("index", { books: books.rows, search });
 
 }));
  // List of Books route
  router.get("/books/:page?", asyncHandler(async(req, res) => {
-  const page = req.query.page || 1;
+  const page = req.params.page || 1;
   let totalPages;
   let bookCount;
   console.log(page);
@@ -107,7 +91,7 @@ router.get('/search', asyncHandler(async(req, res, next) => {
   });
   console.log(books);
   bookCount = await Book.count();
-  totalPages = Math.ceil(bookCount / 5)
+  totalPages = Math.ceil(bookCount / 5) 
   console.log(totalPages);
   console.log(bookCount);
   res.render("index", { books, title: 'Library Books', page: page, totalPages, bookCount });

@@ -6,7 +6,7 @@ block content
   
   h1 Books
   p 
-  form(method= 'get', action= '/search' )
+  form(method= 'get', action= "/books/search" )
     label(for='search') Search
     input#search(name='search', type= 'text')
     button Search
@@ -30,8 +30,8 @@ block content
               td= book.year
             tr
            
-  -var i = 0
-    while i < totalPages
-      a(href=`/books/${i++}`) Next
+  -var i = 1
+    while i <= totalPages
+      a(href=`/books/${i++}`)  #{i - 1}
 
         
