@@ -52,26 +52,7 @@ router.post("/books/new", asyncHandler(async(req, res) => {
   }
 }));
 
- // List of Books route
- router.get("/books/:page?", asyncHandler(async(req, res) => {
-  const page = req.params.page || 1;
-  let totalPages;
-  let bookCount;
-  console.log(page);
-  const books = await Book.findAll({
-    
-    limit: 5, 
-    offset:( page * 5 )- 5,
-    page: page
-   
-  });
-  console.log(books);
-  bookCount = await Book.count();
-  totalPages = Math.ceil(bookCount / 5) 
-  console.log(totalPages);
-  console.log(bookCount);
-  res.render("index", { books, title: 'Library Books', page: page, totalPages, bookCount });
-}));
+ 
 
 
 // Book detail form route
@@ -110,7 +91,6 @@ router.post("/books/:id", asyncHandler(async(req, res) => {
   })
 );
 
-
 /* Delete individual book. */
 router.post('/books/:id/delete', asyncHandler(async (req ,res) => {
   const book = await Book.findByPk(req.params.id);
@@ -123,11 +103,31 @@ router.post('/books/:id/delete', asyncHandler(async (req ,res) => {
   }
 
 }));
+// List of Books route
+router.get("/books/:page?", asyncHandler(async(req, res) => {
+  const page = req.params.page || 1;
+  let totalPages;
+  let bookCount;
+  console.log(page);
+  const books = await Book.findAll({
+    
+    limit: 5, 
+    offset:( page * 5 )- 5,
+    page: page
+   
+  });
+  console.log(books);
+  bookCount = await Book.count();
+  totalPages = Math.ceil(bookCount / 5) 
+  console.log(totalPages);
+  console.log(bookCount);
+  res.render("index", { books, title: 'Library Books', page: page, totalPages, bookCount });
+}));
 
 // Search
-router.get('/books/:search?', asyncHandler(async(req, res, next) => {
-  const search = req.params.search || 1;
-  if(search){
+router.get('/books/search/:search?', asyncHandler(async(req, res, next) => {
+  const search = req.query.search || 1;
+
    books = await Book.findAndCountAll({
     
     attributes: ['title', 'author', 'genre', 'year'],
@@ -160,10 +160,7 @@ router.get('/books/:search?', asyncHandler(async(req, res, next) => {
     } ,
 
    })
-} else {
 
-  res.redirect(301, "/books")
-}
     console.log(search)
   res.render("index", { books: books.rows, search });
 
