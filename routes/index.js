@@ -52,7 +52,48 @@ router.post("/books/new", asyncHandler(async(req, res) => {
   }
 }));
 
- 
+ // Search
+router.get('/books/search', asyncHandler(async(req, res, next) => {
+  const search = req.body;
+
+   books = await Book.findAndCountAll({
+    
+    attributes: ['title', 'author', 'genre', 'year'],
+   
+    where:{
+       [Op.or]:  [
+         {
+           title: {
+             [Op.substring]: search
+           }
+         },
+         {
+           author: {
+             [Op.substring]: search
+           }
+         },
+         {
+           genre:   {
+            [Op.substring]: search
+          }
+         },
+         {
+           year:   {
+            [Op.substring]: search
+          }
+         }
+
+       ]
+
+    } ,
+
+   })
+
+    console.log(search)
+  res.render("index", { books: books.rows, search });
+
+}));
+
 
 
 // Book detail form route
@@ -124,46 +165,5 @@ router.get("/books/:page?", asyncHandler(async(req, res) => {
   res.render("index", { books, title: 'Library Books', page: page, totalPages, bookCount });
 }));
 
-// Search
-router.get('/books/search/:search?', asyncHandler(async(req, res, next) => {
-  const search = req.query.search || 1;
-
-   books = await Book.findAndCountAll({
-    
-    attributes: ['title', 'author', 'genre', 'year'],
-   
-    where:{
-       [Op.or]:  [
-         {
-           title: {
-             [Op.like]: `%${search}%`
-           }
-         },
-         {
-           author: {
-             [Op.like]: `%${search}%`
-           }
-         },
-         {
-           genre:   {
-            [Op.like]: `%${search}%`
-          }
-         },
-         {
-           year:   {
-            [Op.like]: `%${search}%`
-          }
-         }
-
-       ]
-
-    } ,
-
-   })
-
-    console.log(search)
-  res.render("index", { books: books.rows, search });
-
-}));
 
 module.exports = router;
