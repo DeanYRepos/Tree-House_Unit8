@@ -52,48 +52,6 @@ router.post("/books/new", asyncHandler(async(req, res) => {
   }
 }));
 
- // Search
-router.get('/books/search', asyncHandler(async(req, res, next) => {
-  const search = req.body;
-
-   books = await Book.findAndCountAll({
-    
-    attributes: ['title', 'author', 'genre', 'year'],
-   
-    where:{
-       [Op.or]:  [
-         {
-           title: {
-             [Op.substring]: search
-           }
-         },
-         {
-           author: {
-             [Op.substring]: search
-           }
-         },
-         {
-           genre:   {
-            [Op.substring]: search
-          }
-         },
-         {
-           year:   {
-            [Op.substring]: search
-          }
-         }
-
-       ]
-
-    } ,
-
-   })
-
-    console.log(search)
-  res.render("index", { books: books.rows, search });
-
-}));
-
 
 
 // Book detail form route
@@ -144,6 +102,49 @@ router.post('/books/:id/delete', asyncHandler(async (req ,res) => {
   }
 
 }));
+ // Search
+ router.get('/books/search', asyncHandler(async(req, res, next) => {
+  const search = req.body;
+
+   books = await Book.findAndCountAll({
+    
+    attributes: ['title', 'author', 'genre', 'year'],
+   
+    where:{
+       [Op.or]:  [
+         {
+           title: {
+             [Op.substring]: search
+           }
+         },
+         {
+           author: {
+             [Op.substring]: search
+           }
+         },
+         {
+           genre:   {
+            [Op.substring]: search
+          }
+         },
+         {
+           year:   {
+            [Op.substring]: search
+          }
+         }
+
+       ]
+
+    } ,
+
+   })
+
+    console.log(search)
+  res.render("index", { books: books.rows, search });
+
+}));
+
+
 // List of Books route
 router.get("/books/:page?", asyncHandler(async(req, res) => {
   const page = req.params.page || 1;
