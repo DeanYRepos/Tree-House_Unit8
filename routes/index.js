@@ -57,9 +57,9 @@ router.post("/books/new", asyncHandler(async(req, res) => {
 // Book detail form route
 router.get("/books/update/:id", asyncHandler(async(req, res) => {
   const book = await Book.findByPk(req.params.id);
-
+console.log(book);
   if(book){
-   res.render("update-book", { book, id: req.params.id });
+   res.render("update-book", { book, id: book.id });
     } else {
      errHandler( 404, 'Page not found! Please try again.');
     
@@ -104,7 +104,7 @@ router.post('/books/:id/delete', asyncHandler(async (req ,res) => {
 }));
  // Search
  router.get('/books/search', asyncHandler(async(req, res, next) => {
-  const search = req.body;
+  const search = req.query.search;
 
    books = await Book.findAndCountAll({
     
