@@ -108,7 +108,7 @@ router.post('/books/:id/delete', asyncHandler(async (req ,res) => {
 
    books = await Book.findAndCountAll({
     
-    attributes: ['title', 'author', 'genre', 'year'],
+    attributes: ['title', 'author', 'genre', 'year', 'id'],
    
     where:{
        [Op.or]:  [
@@ -140,7 +140,7 @@ router.post('/books/:id/delete', asyncHandler(async (req ,res) => {
    })
 
     console.log(search)
-  res.render("index", { books: books.rows, search });
+  res.render("index", { books: books.rows, id: books.id, search });
 
 }));
 
