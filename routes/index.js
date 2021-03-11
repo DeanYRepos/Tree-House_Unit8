@@ -53,9 +53,8 @@ router.post("/books/new", asyncHandler(async(req, res) => {
 }));
 
 
-
 // Book detail form route
-router.get("/books/update/:id", asyncHandler(async(req, res) => {
+router.get("/books/:id", asyncHandler(async(req, res) => {
   const book = await Book.findByPk(req.params.id);
 console.log(book);
   if(book){
