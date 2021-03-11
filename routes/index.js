@@ -69,7 +69,7 @@ const errHandler = (errStatus, msg) =>{
  router.get('/', asyncHandler(async(req, res, next) => {
    
    const books = await Book.findAll()
-   res.redirect(301, "/books");
+   res.redirect("/books/page/1");
 }));
 
 // New Book form route
@@ -82,7 +82,7 @@ router.post("/books/new", asyncHandler(async(req, res) => {
   let book;
   try{
    book = await Book.create(req.body);
-    res.redirect(301,"/books");
+    res.redirect("/books/page/1");
     } catch (error){
       if(error.name === "SequelizeValidationError"){
         book = await Book.build(req.body);
@@ -97,7 +97,7 @@ router.post("/books/new", asyncHandler(async(req, res) => {
 // Book detail form route
 router.get("/books/:id", asyncHandler(async(req, res) => {
   const book = await Book.findByPk(req.params.id);
-console.log(book);
+// console.log(book);
   if(book){
    res.render("update-book", { book, id: book.id });
     } else {
@@ -114,7 +114,7 @@ router.post("/books/:id", asyncHandler(async(req, res) => {
     book = await Book.findByPk(req.params.id);
     if(book){ 
       await book.update(req.body);
-      res.redirect(301,"/books");
+      res.redirect("/books/page/1");
   }  else {
     errHandler(404, 'Page not found!');
   }
@@ -136,7 +136,7 @@ router.post('/books/:id/delete', asyncHandler(async (req ,res) => {
   
   if(book){
     await book.destroy();
-    res.redirect(301,"/books");
+    res.redirect("/books/page/1");
   } else{
     errHandler(404, 'Page not found! Please try again.');
   }
@@ -158,11 +158,11 @@ router.get("/books/page/:page?", asyncHandler(async(req, res) => {
     page: page
    
   });
-  console.log(books);
+ // console.log(books);
   bookCount = await Book.count();
   totalPages = Math.ceil(bookCount / 5) 
-  console.log(totalPages);
-  console.log(bookCount);
+  // console.log(totalPages);
+  // console.log(bookCount);
   res.render("index", { books, title: 'Library Books', page: page, totalPages, bookCount });
 }));
 
