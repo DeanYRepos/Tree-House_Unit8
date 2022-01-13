@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 extend layout
 //- add id attributes 
 block content 
@@ -11,3 +12,18 @@ block content
             input(type='submit', value='Create New Book')
         p
             a.button(href='/books/page/1') Cancel
+=======
+extend layout
+//- add id attributes 
+block content 
+    head
+    title New Book
+    h1 New Book
+    form(method='POST', action='/books/new')
+        include form
+    
+        p
+            input(type='submit', value='Create New Book')
+        p
+            a.button(href='/books/page/1') Cancel
+>>>>>>> 7c9c3c2... Making project deploy ready
