@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const port = process.env.PORT || 3000;
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -54,6 +55,11 @@ app.use(function(err, req, res, next) {
   
   res.status(err.status || 500);
   res.render('error',err);
+});
+
+app.listen(port, () => {
+
+  console.log("Listening on port 3000!")
 });
 
 module.exports = app;
